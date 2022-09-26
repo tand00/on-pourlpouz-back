@@ -1,24 +1,35 @@
-function generateFace() {
-    //https://api.lorem.space/image/face?w=300&h=300
+var fetch = require('node-fetch');
+
+async function generateFace() {
+    return "https://api.lorem.space/image/face?w=500&h=500&rndmtoken=" + Math.random();
 }
 
-function generateFurniture() {
-    //https://api.lorem.space/image/furniture?w=150&h=150
+async function generateFurniture() {
+    return "https://api.lorem.space/image/furniture?w=500&h=500&rndmtoken=" + Math.random();
 }
 
-function generateDrink() {
-    //https://api.lorem.space/image/drink?w=150&h=150
+async function generateDrink() {
+    return "https://api.lorem.space/image/drink?w=500&h=500&rndmtoken=" + Math.random();
 }
 
-function generateCursed() {
-    //https://cursedimg.herokuapp.com/api
+async function generateCursed() {
+    let res = await fetch("https://cursedimg.herokuapp.com/api");
+    let json = await res.json();
+    return json["image"];
 }
 
-function generatePokemon() {
-    //https://pokeapi.co/api/v2/pokemon/{id or name}/
+async function generatePokemon() {
+    let id = Math.floor(Math.random() * 500);
+    return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id + ".png"
 }
 
-const SOURCES = [
+async function generateFood() {
+    let res = await fetch("https://foodish-api.herokuapp.com/api/");
+    let json = await res.json();
+    return json["image"];
+}
+
+module.exports = [
     {
         question: "Donne donc un nom à cette charmante personne :",
         generator: generateFace
@@ -27,10 +38,10 @@ const SOURCES = [
         question: "Mais comment peut bien s'appeler ce meuble ?",
         generator: generateFurniture
     },
-    {
-        question: "Slurp slurp, décrivez moi ce cocktail",
+    /*{
+        question: "Slurp slurp, à quoi est ce cocktail ?",
         generator: generateDrink
-    },
+    },*/
     {
         question: "Décrivez la situation suivante (parce que là je sais pas ce que c'est)",
         generator: generateCursed
@@ -38,5 +49,9 @@ const SOURCES = [
     {
         question: "Donnez un nom absolument incorrect à ce Pokémoune",
         generator: generatePokemon
+    },
+    {
+        question: "Décrivez ce plat à la manière de 'poulet piquante, manese'",
+        generator: generateFood
     }
-]
+];

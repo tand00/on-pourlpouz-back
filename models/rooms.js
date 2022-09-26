@@ -1,54 +1,68 @@
-import { SOURCES } from "./generators";
+var SOURCES = require('./generators');
 
 class Room {
 
-    static waitingTime = 20000;
+    static waitingTime = 5000;
 
     status = "not-started";
-    answers = {};
+    answers = [];
     question = {};
+
+    constructor(name) {
+        this.name = name;
+    }
 
     getStatus() {
         let answers = (this.status === "revealing") ? this.answers : {};
         return {
             result: true,
-            status: this.status,
+            state: this.status,
+            name: this.name,
             answers: answers,
             question: this.question
         };
     }
 
-    registerAnswer(player, answer) {
-        this.answers[player] = answer;
+    registerAnswer(answer) {
+        this.answers.push(answer);
     }
 
-    startNextQuestion() {
+    async startNextQuestion() {
         this.status = "waiting";
-        this.generateQuestion();
-        setTimeout(nextState, Room.waitingTime);
+        await this.generateQuestion();
+        let that = this;
+        setTimeout(function() {
+            that.nextState();
+        }, Room.waitingTime);
     }
 
-    nextState() {
-        switch(this.status) {
+    async nextState() {
+        console.log("YOUPI");
+        console.log(this);
+        console.log(this.status);
+        const current_state = this.status;
+        switch(current_state) {
             case "not-started":
             case "revealing":
-                this.startNextQuestion();
+                await this.startNextQuestion();
                 break;
             case "waiting":
                 this.status = "revealing";
+                console.log("bah");
                 break;
         }
+        console.log(this.status);
     }
 
-    pass() {
+    async pass() {
         if(this.status !== "waiting") return;
-        this.startNextQuestion();
+        await this.startNextQuestion();
     }
 
-    generateQuestion() {
+    async generateQuestion() {
         let source = SOURCES[Math.floor(Math.random() * SOURCES.length)];
         let question = source.question;
-        let link = source.generator();
+        let link = await source.generator();
         this.question = {
             text: question,
             image: link
@@ -56,3 +70,5 @@ class Room {
     }
 
 }
+
+module.exports = Room;

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-import { Room } from '../models/rooms'; 
+var Room = require('../models/rooms');
 
 var rooms = {};
 
@@ -9,7 +9,7 @@ router.post('/create-room', function(req, res) {
     if(!("name" in  req.body)) return res.json({result: false});
     let roomName = req.body.name;
     if(roomName in rooms) return res.json({result: false});
-    rooms[roomName] = new Room();
+    rooms[roomName] = new Room(roomName);
     res.json({ result: true });
 });
 
@@ -23,23 +23,23 @@ router.get('/room-status/:roomName', function(req, res) {
 router.post('/send-answer', function(req, res) {
     let roomName = req.body.name;
     let answer = req.body.answer;
-    let player = req.body.player;
     let room = rooms[roomName];
-    room.registerAnswer(player, answer);
+    room.registerAnswer(answer);
     res.json({result: true});
 });
 
-router.post('/next-state', function(req, res) {
+router.post('/next-state', async function(req, res) {
     let roomName = req.body.name;
     let room = rooms[roomName];
-    room.nextState();
+    await room.nextState();
     res.json({result: true});
 });
 
-router.post('/pass', function(req, res) {
+router.post('/pass', async function(req, res) {
     let roomName = req.body.name;
     let room = rooms[roomName];
-    room.pass();
+    await room.pass();
+    res.json({result: true});
 });
 
 module.exports = router;
