@@ -12,6 +12,10 @@ async function generateDrink() {
     return "https://api.lorem.space/image/drink?w=500&h=500&rndmtoken=" + Math.random();
 }
 
+async function generateMovie() {
+    return "https://api.lorem.space/image/movie?w=500&h=600&rndmtoken=" + Math.random();
+}
+
 async function generateCursed() {
     let res = await fetch("https://cursedimg.herokuapp.com/api");
     let json = await res.json();
@@ -43,11 +47,15 @@ module.exports = [
         generator: generateCursed
     },
     {
-        question: "Donne un nom absolument incorrect à ce Pokémoune (ex : Francisco)",
+        question: "Donne un nom absolument incorrect à ce Pokémoune (pas Francisco)",
         generator: generatePokemon
     },
     {
         question: "Décrivez ce plat à la manière de 'poulet piquante, manese'",
         generator: generateFood
+    },
+    {
+        question: "Le nom de ce film est NAZE, trouve en un nouveau !",
+        generator: generateMovie
     }
 ];
