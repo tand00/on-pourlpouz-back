@@ -2,11 +2,12 @@ var SOURCES = require('./generators');
 
 class Room {
 
-    static waitingTime = 5000;
+    static waitingTime = 15000;
 
     status = "not-started";
     answers = [];
     question = {};
+    start_time = 0;
 
     constructor(name) {
         this.name = name;
@@ -19,7 +20,11 @@ class Room {
             state: this.status,
             name: this.name,
             answers: answers,
-            question: this.question
+            question: this.question,
+            timing: {
+                total_time: Room.waitingTime / 1000,
+                remaining: (Room.waitingTime - (Date.now() - this.start_time))/1000
+            }
         };
     }
 
@@ -28,9 +33,11 @@ class Room {
     }
 
     async startNextQuestion() {
+        this.answers = [];
         this.status = "waiting";
         await this.generateQuestion();
         let that = this;
+        this.start_time = Date.now();
         setTimeout(function() {
             that.nextState();
         }, Room.waitingTime);
