@@ -19,7 +19,8 @@ class Room {
             state: this.status,
             name: this.name,
             answers: answers,
-            question: this.question
+            question: this.question,
+            token: Math.random()
         };
     }
 
