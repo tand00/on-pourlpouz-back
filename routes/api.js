@@ -5,6 +5,10 @@ var Room = require('../models/rooms');
 
 var rooms = {};
 
+router.get('/', function(req,res) {
+    res.send("Hello !");
+});
+
 router.post('/create-room', function(req, res) {
     if(!("name" in  req.body)) return res.json({result: false});
     let roomName = req.body.name;

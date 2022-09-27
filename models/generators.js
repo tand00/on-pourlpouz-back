@@ -35,19 +35,15 @@ module.exports = [
         generator: generateFace
     },
     {
-        question: "Mais comment peut bien s'appeler ce meuble ?",
+        question: "Mais quel est le prénom de ce meuble ?",
         generator: generateFurniture
     },
-    /*{
-        question: "Slurp slurp, à quoi est ce cocktail ?",
-        generator: generateDrink
-    },*/
     {
         question: "Décrivez la situation suivante (parce que là je sais pas ce que c'est)",
         generator: generateCursed
     },
     {
-        question: "Donnez un nom absolument incorrect à ce Pokémoune",
+        question: "Donne un nom absolument incorrect à ce Pokémoune (ex : Francisco)",
         generator: generatePokemon
     },
     {
